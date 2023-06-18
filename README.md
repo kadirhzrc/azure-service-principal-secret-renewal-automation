@@ -1,0 +1,1 @@
+# azure-service-principal-secret-renewal-automation
