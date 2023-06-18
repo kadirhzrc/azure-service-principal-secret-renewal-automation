@@ -1,0 +1,168 @@
+# Pipeline performs automatic secret rotation of specified Service Principals, one per task
+pool:
+  vmImage: 'ubuntu-latest'
+
+trigger: none
+
+# Scheduled run each Sunday
+schedules:
+- cron: "0 12 * * 0"
+  displayName: Build every Sunday at 12:00 UTC (14:00 in Warsaw time)
+  branches:
+    include:
+    - master
+  always: true
+
+steps:
+# MACE secrets
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate DEV's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "d0dc819e-d9e5-4631-bb9c-492edd413fff"
+        DURATION: "90"
+        PROJECT_URI: "uri"
+        SUBSCRIPTION: "sub"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-MACE-QA's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-MACE-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "ce1b117d-1471-4ec6-975e-ac2b69139827"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-MACE-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-MACE-PROD's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-MACE-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "ac4e21ee-8f6b-4666-8966-63413656d13e"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-MACE-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-MACE-Secret-Rotation's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-MACE-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "741b3356-6ab3-4d84-9c56-240301b5e171"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-MACE-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+# iACTPM SPs
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-DEV's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "019b0f06-0d51-4c6e-a2ad-ef13fa9c0908"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-QA's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "75892b32-9649-460b-8879-3d658c9e134d"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-Test's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "78bddbd4-e6dc-4540-9237-a6ee20866ae2"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-Staging's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "32bf404f-634d-4d0f-9df9-4611e7e9fa22"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-PROD's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "9e5cda1b-0008-4976-b25d-74f3c3fb4795"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+
+
+  - task: AzurePowerShell@5
+    displayName: "Run the script to rotate ADO-iACTPM-Secret-Rotation's secret."
+    inputs:
+      azurePowerShellVersion: 'LatestVersion'
+      azureSubscription: 'SC-to-AZ-RG-iACTPM-Rotation'
+      ScriptType: 'filePath'
+      ScriptPath: 'pipelines/scripts/rotate_secret.ps1'
+      pwsh: true
+    env:
+        APP_ID: "cf4c686d-1a4e-473d-addc-9282032947d4"
+        DURATION: "90"
+        PROJECT_URI: "https://dev.azure.com/pg-customer-trade-investment-modernization/TIM%20Italy%20integration/"
+        SUBSCRIPTION: "SC-to-AZ-RG-iACTPM-Rotation"
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
